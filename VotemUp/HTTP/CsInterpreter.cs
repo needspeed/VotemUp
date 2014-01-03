@@ -8,6 +8,11 @@ namespace VotemUp
 {
     static class CsInterpreter
     {
+
+        public const String CS_EXTENSION = ".csh";
+        public const String CS_OPENING_TAG = "<cs>";
+        public const String CS_CLOSING_TAG = "</cs>";
+
         public static String interpretCsCode(String csCode, PlayList pl, String path_of_cs_file, Dictionary<String, String> vars)
         {
             String interpreted = "";

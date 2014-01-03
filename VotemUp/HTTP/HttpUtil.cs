@@ -15,6 +15,11 @@ namespace VotemUp.HTTP
             "/404.html"
         };
 
+        public enum HTTPSTATUS
+        {
+            FORBIDDEN = 403, NOT_FOUND = 404, INTERNAL_SERVER_ERROR = 500, CS_CODE_DEFECT = 566
+        }
+
         public enum MIMETYPE
         {
             HTML, PNG, CSS
@@ -47,6 +52,29 @@ namespace VotemUp.HTTP
         public static String getHTMLdirectory()
         {
             return "../../HTML/";
+        }
+
+        public static void throwError(HTTPSTATUS status, System.IO.StreamWriter out_stream, bool writesuccess = true)
+        {
+            if (writesuccess) Bend.Util.HttpProcessor.writeSuccess(out_stream);
+            int code = (int)status;
+            String msg = "";
+            switch (status)
+            { 
+                case HTTPSTATUS.FORBIDDEN:
+                    msg = "Forbidden";
+                    break;
+                case HTTPSTATUS.NOT_FOUND:
+                    msg = "Page not found";
+                    break;
+                case HTTPSTATUS.CS_CODE_DEFECT:
+                    msg = "Defect cs code";
+                    break;
+                default:
+                    code = 500;
+                    msg = "Internal Server Error";
+                    break;
+            }
         }
     }
 }

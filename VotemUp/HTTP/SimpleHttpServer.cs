@@ -191,9 +191,7 @@ namespace Bend.Util {
         }
 
         public void writeFailure() {
-            outputStream.WriteLine("HTTP/1.0 567 Server error");
-            outputStream.WriteLine("Connection: close");
-            outputStream.WriteLine("");
+            VotemUp.HTTP.HttpUtil.throwError(VotemUp.HTTP.HttpUtil.HTTPSTATUS.INTERNAL_SERVER_ERROR, outputStream);
         }
     }
 

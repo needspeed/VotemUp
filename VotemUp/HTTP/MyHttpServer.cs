@@ -13,6 +13,8 @@ namespace VotemUp.HTTP
         private UserManager um;
         private PlayList pl;
 
+      
+
         public MyHttpServer(int port, UserManager um, PlayList pl) : base(port)
         {
             this.um = um;
@@ -28,7 +30,7 @@ namespace VotemUp.HTTP
         {
             try
             {                
-                if (url.EndsWith(".csh"))
+                if (url.EndsWith(CsInterpreter.CS_EXTENSION))
                 {
                     //parse commands in a cs and return html
                     String path = url.Substring(1);
@@ -39,14 +41,14 @@ namespace VotemUp.HTTP
 
                         String cs = sr.ReadToEnd();
 
-                        String[] split_at_beginnig_tag = cs.Split(new String[] { "<cs>" }, StringSplitOptions.None);
+                        String[] split_at_beginnig_tag = cs.Split(new String[] { CsInterpreter.CS_OPENING_TAG }, StringSplitOptions.None);
                         String non_cs_code_at_beginning = split_at_beginnig_tag[0];
 
                         HttpProcessor.writeSuccess(out_stream);
                         out_stream.Write(non_cs_code_at_beginning);
                         for (int i = 1; i < split_at_beginnig_tag.Length; i++)
                         {
-                            String[] split_at_end_tag = split_at_beginnig_tag[i].Split(new String[] { "</cs>" }, StringSplitOptions.None);
+                            String[] split_at_end_tag = split_at_beginnig_tag[i].Split(new String[] { CsInterpreter.CS_CLOSING_TAG }, StringSplitOptions.None);
                             String cs_code = split_at_end_tag[0];
                             String following_non_cs_code = split_at_end_tag[1];
 
@@ -59,9 +61,7 @@ namespace VotemUp.HTTP
                     }
                     catch (IndexOutOfRangeException ioore)
                     {
-                        HttpProcessor.writeSuccess(out_stream);
-
-                        out_stream.WriteLine("<h1> 566 Defect cs code </h1>");
+                        HttpUtil.throwError(HttpUtil.HTTPSTATUS.CS_CODE_DEFECT, out_stream);
                     }
                 }
                 else
@@ -70,7 +70,7 @@ namespace VotemUp.HTTP
                     sendFile(path, out_stream);
                 }
             }
-            catch (IOException ioe)
+            catch (Exception ioe) //catches FileNotFoundException, DirectoryNotFoundException, UnauthorizedAccessException
             {
                 if (ioe is FileNotFoundException || ioe is DirectoryNotFoundException)
                 {
@@ -87,8 +87,13 @@ namespace VotemUp.HTTP
                             continue;
                         }
                     }
+                    HttpUtil.throwError(HttpUtil.HTTPSTATUS.NOT_FOUND, out_stream);
                 }
-                else throw ioe;
+                else if (ioe is UnauthorizedAccessException)
+                {
+                    HttpUtil.throwError(HttpUtil.HTTPSTATUS.FORBIDDEN, out_stream);
+                }
+                else throw;
             }        
         }
 
