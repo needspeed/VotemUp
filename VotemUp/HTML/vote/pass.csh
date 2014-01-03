@@ -15,7 +15,7 @@
 </header>
 <div id="wrapper">
   <div id="scroll-content">
-    	<form action=index.cs method=post>
+    	<form action=index.csh method=post>
         	<table width="100%" cellpadding="3" cellspacing="3">
 	<tr>
 		<td id="input">Username</td>

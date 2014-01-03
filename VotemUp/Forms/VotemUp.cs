@@ -14,7 +14,7 @@ namespace VotemUp
 {
     public partial class VotemUp : Form
     {
-        const int HTTP_PORT = 51001;
+        const int HTTP_PORT = 9987;
 
         String masterpw = "";
         PlayList pl;
@@ -27,7 +27,6 @@ namespace VotemUp
             InitializeComponent();
 
             this.um = new UserManager();
-            um.addUser(new Voter("Testvoter", "asdfadsfadfdffsdfasdfdsfasdfadsfadfadsfadsfadfsfsdfs"));
         }
 
         // Events: -------------------------------------------------------------------------------------------------

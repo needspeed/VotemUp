@@ -61,7 +61,7 @@ namespace VotemUp.HTTP
                     {
                         HttpProcessor.writeSuccess(out_stream);
 
-                        out_stream.WriteLine("<h1> 566 Defect .cs code </h1>");
+                        out_stream.WriteLine("<h1> 566 Defect cs code </h1>");
                     }
                 }
                 else
@@ -127,7 +127,7 @@ namespace VotemUp.HTTP
 
             bool success = false;
 
-            if (p.http_url.Equals("/vote/index.cs"))
+            if (p.http_url.Equals("/vote/index.csh"))
             {
                 String user = act_args["user"];
                 String pass = act_args["pw"];
@@ -137,14 +137,14 @@ namespace VotemUp.HTTP
                 success = pl.vote(uid, um.getUser(user, md5pass));
 
                 p.outputStream.WriteLine("<h1>Vote aftersite</h1>");
-                p.outputStream.WriteLine("<a href=/vote/vote.cs>Vote was {0}</a><p>", (success) ? "successfull" : "not successfull");
+                p.outputStream.WriteLine("<a href=/vote/vote.csh>Vote was {0}</a><p>", (success) ? "successfull" : "not successfull");
             }
-            else if (p.http_url.Equals("/vote/pass.cs"))
+            else if (p.http_url.Equals("/vote/pass.csh"))
             {                
                 Dictionary<String, String> vars_to_pass = new Dictionary<string,string>();
                 vars_to_pass["UID"] = act_args["uid"];
 
-                openFile("/vote/pass.cs", p.outputStream, vars_to_pass);
+                openFile("/vote/pass.csh", p.outputStream, vars_to_pass);
             }
 
             //p.outputStream.WriteLine("postbody: <pre>{0}</pre>", data);

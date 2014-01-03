@@ -104,10 +104,7 @@
     <Content Include="HTML\vote\Design.css" />
     <Content Include="HTML\vote\listElement.html" />
     <Content Include="HTML\vote\shadow.png" />
-    <Content Include="HTML\vote\textured_paper.png" />
-    <Content Include="HTML\vote\textured_paper_%402X.png" />
     <Content Include="HTML\vote\Timeline-List-Grid-List-icon.png" />
-    <Content Include="HTML\vote\Voting.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

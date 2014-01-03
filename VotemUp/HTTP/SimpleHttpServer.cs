@@ -72,7 +72,14 @@ namespace Bend.Util {
                 Console.WriteLine("Exception: " + e.ToString());
                 writeFailure();
             }
-            outputStream.Flush();
+            try
+            {
+                outputStream.Flush();
+            }
+            catch (IOException ioe)
+            {
+                Console.WriteLine("Connection reset");
+            }
             // bs.Flush(); // flush any remaining output
             inputStream = null; outputStream = null; // bs = null;            
             socket.Close();             
