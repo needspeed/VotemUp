@@ -70,16 +70,18 @@ namespace VotemUp.HTTP
                     sendFile(path, out_stream);
                 }
             }
-            catch (Exception ioe) //catches FileNotFoundException, DirectoryNotFoundException, UnauthorizedAccessException
+            catch (Exception e) //catches FileNotFoundException, DirectoryNotFoundException, UnauthorizedAccessException
             {
-                if (ioe is FileNotFoundException || ioe is DirectoryNotFoundException)
+                bool issue_resolved = false;
+                if (e is FileNotFoundException || e is DirectoryNotFoundException)
                 {
-                    if (!alternative_pathing) throw ioe;
+                    if (!alternative_pathing) throw e;
                     foreach (String s in HttpUtil.alternativePage)
                     {
                         try
                         {
                             openFile(((s.StartsWith("/")) ? "" : url) + s, out_stream, null, false);
+                            issue_resolved = true;
                             break;
                         }
                         catch (IOException fnfeindex)
@@ -87,13 +89,13 @@ namespace VotemUp.HTTP
                             continue;
                         }
                     }
-                    HttpUtil.throwError(HttpUtil.HTTPSTATUS.NOT_FOUND, out_stream);
+                    if (!issue_resolved) HttpUtil.throwError(HttpUtil.HTTPSTATUS.NOT_FOUND, out_stream);
                 }
-                else if (ioe is UnauthorizedAccessException)
+                else if (e is UnauthorizedAccessException)
                 {
                     HttpUtil.throwError(HttpUtil.HTTPSTATUS.FORBIDDEN, out_stream);
                 }
-                else throw;
+                else throw e;
             }        
         }
 

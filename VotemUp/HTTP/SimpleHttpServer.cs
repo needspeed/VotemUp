@@ -128,7 +128,8 @@ namespace Bend.Util {
         }
 
         private const int BUF_SIZE = 4096;
-        public void handlePOSTRequest() {
+        public void handlePOSTRequest() 
+        {
             // this post data processing just reads everything into a memory stream.
             // this is fine for smallish things, but for large stuff we should really
             // hand an input stream to the request processor. However, the input stream 
@@ -169,7 +170,8 @@ namespace Bend.Util {
 
         }
 
-        public void writeSuccess(string content_type="text/html") {
+        public void writeSuccess(string content_type="text/html") 
+        {
             
             outputStream.WriteLine("HTTP/1.0 200 OK");            
             outputStream.WriteLine("Content-Type: " + content_type);
@@ -190,12 +192,14 @@ namespace Bend.Util {
             out_stream.WriteLine("");
         }
 
-        public void writeFailure() {
+        public void writeFailure() 
+        {
             VotemUp.HTTP.HttpUtil.throwError(VotemUp.HTTP.HttpUtil.HTTPSTATUS.INTERNAL_SERVER_ERROR, outputStream);
         }
     }
 
-    public abstract class HttpServer {
+    public abstract class HttpServer 
+    {
 
         protected int port;
         TcpListener listener;
@@ -203,14 +207,17 @@ namespace Bend.Util {
 
         public void stopServer() { is_active = false; }
        
-        public HttpServer(int port) {
+        public HttpServer(int port) 
+        {
             this.port = port;
         }
 
-        public void listen() {
+        public void listen() 
+        {
             listener = new TcpListener(port);
             listener.Start();
-            while (is_active) {                
+            while (is_active) 
+            {                
                 TcpClient s = listener.AcceptTcpClient();
                 HttpProcessor processor = new HttpProcessor(s, this);
                 Thread thread = new Thread(new ThreadStart(processor.process));
@@ -222,47 +229,6 @@ namespace Bend.Util {
         public abstract void handleGETRequest(HttpProcessor p);
         public abstract void handlePOSTRequest(HttpProcessor p, StreamReader inputData);
     }
-
-    public class MyHttpServer : HttpServer {
-        public MyHttpServer(int port)
-            : base(port) {
-        }
-        public override void handleGETRequest (HttpProcessor p)
-		{
-
-			if (p.http_url.Equals ("/Test.png")) {
-				Stream fs = File.Open("../../Test.png",FileMode.Open);
-
-				p.writeSuccess("image/png");
-				fs.CopyTo (p.outputStream.BaseStream);
-				p.outputStream.BaseStream.Flush ();
-			}
-
-            Console.WriteLine("request: {0}", p.http_url);
-            p.writeSuccess();
-            p.outputStream.WriteLine("<html><body><h1>test server</h1>");
-            p.outputStream.WriteLine("Current Time: " + DateTime.Now.ToString());
-            p.outputStream.WriteLine("url : {0}", p.http_url);
-
-            p.outputStream.WriteLine("<form method=post action=/form>");
-            p.outputStream.WriteLine("<input type=text name=foo value=foovalue>");
-            p.outputStream.WriteLine("<input type=submit name=bar value=barvalue>");
-            p.outputStream.WriteLine("</form>");
-        }
-
-        public override void handlePOSTRequest(HttpProcessor p, StreamReader inputData) {
-            Console.WriteLine("POST request: {0}", p.http_url);
-            string data = inputData.ReadToEnd();
-
-            p.writeSuccess();
-            p.outputStream.WriteLine("<html><body><h1>test server</h1>");
-            p.outputStream.WriteLine("<a href=/test>return</a><p>");
-            p.outputStream.WriteLine("postbody: <pre>{0}</pre>", data);
-            
-
-        }
-    }
-
 }
 
 

@@ -75,6 +75,9 @@ namespace VotemUp.HTTP
                     msg = "Internal Server Error";
                     break;
             }
+
+            out_stream.WriteLine(String.Format("<h1>{0:d} {1}</h1>", code, msg)); //<h1>" + code + " " + msg);
+            out_stream.BaseStream.Flush();
         }
     }
 }
