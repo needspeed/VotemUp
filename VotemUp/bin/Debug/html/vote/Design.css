@@ -1,0 +1,138 @@
+body,ul,li {
+    padding:0;
+    margin:0;
+    border:0;
+}
+
+body {
+    font-family:"helvetica", Times, sans-serif;
+	color:#373737;
+	background-image:url(textured_paper.png);
+}
+
+header{
+	background-image:url(textured_paper.png);
+	background-repeat:repeat;
+    position:fixed; 
+    z-index:2;
+    top:0; left:0;
+    width:100%;
+    height:80px;
+    padding:0;
+}
+
+
+header, footer{
+	font-size: 20px;
+	text-align: center;
+	color: #666666;
+	font-weight: bold;
+	line-height: 45px;
+}
+
+#wrapper {
+    z-index:1;
+    padding: 80px 0 0px 0;
+    width:100%;
+}
+
+#scroll-content {
+    z-index:1;
+    padding:0;
+    -webkit-overflow-scrolling:touch;
+    overflow:auto;
+}
+
+ul {
+    list-style:none;
+    padding:0;
+    margin:0;
+    width:100%;
+    text-align:left;
+}
+#act{
+	float:left;
+	padding-top:15px;
+	padding-bottom:15px;
+	width:50%;
+	background-color:#373737;	
+}
+#input{
+	font-size:64px;
+    text-align:center; 
+    vertical-align:middle;
+	width:50%;
+}
+#infield{
+width:90%;
+height:50px;
+font-size:50px;
+margin-left:5%;
+}
+#inact{
+	margin-top:0px;
+	margin-left:50%;
+	padding-top:15px;
+	padding-bottom:15px;
+	width:50%;	
+}
+
+#myButton {
+	text-indent:-999px;
+	background-image:url(arrow2.png);
+	background-repeat:no-repeat;
+	background-color:transparent;
+    cursor:pointer;
+    border: none;
+	width:46px;
+	height:50px;
+}
+#trans {
+background-color:transparent;
+border:none;
+}
+
+li {
+    padding:0 10px;
+    height: 120px;
+    line-height:40px;
+    border-bottom:1px solid #666666;
+    border-top:1px solid #eeeeee;
+    font-size:14px;
+}
+#float_right{
+	margin-top:25px;
+	float:right;
+	width:46px;
+	height:50px;	
+}
+uparrow{
+	margin-top:20px;
+}
+
+#Title{
+	font-size:24px;
+}
+
+#Artist{
+	
+}
+
+#Duration{
+	
+}
+
+
+
+
+#liste{
+margin-top:7px;
+margin-bottom:10px;
+height:100px;
+}
+
+
+#cover {
+		height: 100px;
+		wigth: 100px;
+}

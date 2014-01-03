@@ -1,0 +1,35 @@
+<li>
+    <div id=liste>
+        <table border=0 style=\background-color:transparent width=100% height=100px cellpadding=3 cellspacing=3\>
+             <tr>
+                <td width=100px>
+                    <img id=cover src= $ALBUM_COVER  >
+                </td>
+                <td width=100%>
+                    <table border=0 bordercolor=0 style=background-color:transparen width=100% cellpadding=3 cellspacing=3>
+                        <tr>
+                            <td id=Title>
+                                 $SONG_TITLE
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>by
+                                $SONG_ARTIST
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                $SONG_DURATION
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <form action=pass.cs method=post>
+                        <input id=myButton type=submit src=arrow.png name=uid value=$SONG_UID >
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</li>
