@@ -47,18 +47,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="HTML\vote\Index.csh" />
+    <None Include="HTML\vote\pass.csh" />
+    <None Include="HTML\vote\vote.csh" />
     <Compile Include="HTTP\CsInterpreter.cs" />
+    <Compile Include="HTTP\HttpUtil.cs" />
     <Compile Include="HTTP\MyHttpServer.cs" />
     <Compile Include="HTTP\SimpleHttpServer.cs" />
-    <Compile Include="PlayList.cs" />
-    <Compile Include="Song.cs" />
-    <Compile Include="UserManager.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="Song\PlayList.cs" />
+    <Compile Include="Song\Song.cs" />
+    <Compile Include="Voting\UserManager.cs" />
+    <Compile Include="Util\Util.cs" />
     <Compile Include="Voting\Vote.cs" />
-    <Compile Include="VotemUp.cs">
+    <Compile Include="Forms\VotemUp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VotemUp.Designer.cs">
+    <Compile Include="Forms\VotemUp.Designer.cs">
       <DependentUpon>VotemUp.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -74,9 +78,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="VotemUp.resx">
+    <EmbeddedResource Include="Forms\VotemUp.resx">
       <DependentUpon>VotemUp.cs</DependentUpon>
     </EmbeddedResource>
+    <Content Include="HTML\404.html" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -89,6 +94,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HTML\arrow.png" />
+    <Content Include="HTML\index.html" />
+    <Content Include="HTML\vote\arrow.png" />
+    <Content Include="HTML\vote\arrow2.png" />
+    <Content Include="HTML\vote\button1.png" />
+    <Content Include="HTML\vote\Design.css" />
+    <Content Include="HTML\vote\listElement.html" />
+    <Content Include="HTML\vote\shadow.png" />
+    <Content Include="HTML\vote\textured_paper.png" />
+    <Content Include="HTML\vote\textured_paper_%402X.png" />
+    <Content Include="HTML\vote\Timeline-List-Grid-List-icon.png" />
+    <Content Include="HTML\vote\Voting.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

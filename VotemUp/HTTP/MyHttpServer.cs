@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Bend.Util;
 using System.IO;
-using Bend.Util;
 
 namespace VotemUp.HTTP
 {
@@ -25,88 +24,77 @@ namespace VotemUp.HTTP
             openFile(p.http_url, p.outputStream);
         }
 
-        private void openFile(String url, StreamWriter out_stream, Dictionary<String, String> vars = null)
+        private void openFile(String url, StreamWriter out_stream, Dictionary<String, String> vars = null, bool alternative_pathing = true)
         {
-            if (!url.Equals("/") && !url.EndsWith(".cs"))
-            {
-                String path = url.Substring(1);
-                try
+            try
+            {                
+                if (url.EndsWith(".csh"))
                 {
-                    String mime_type = "text/html";
-                    if (url.EndsWith(".png")) mime_type = "image/png";
-                    else if (url.EndsWith(".html")) mime_type = "text/html";
-                    else if (url.EndsWith(".css")) mime_type = "text/css";
-                    sendFile(path, mime_type, out_stream);
-                }
-                catch (FileNotFoundException fnfe)
-                {
-                    sendFile("404", "text/html", out_stream);
-                }
-            }
-            else if (url.EndsWith(".cs"))
-            {
-                //parse commands in a cs and return html
-                String path = url.Substring(1);
+                    //parse commands in a cs and return html
+                    String path = url.Substring(1);
 
-                try
-                {
-                    StreamReader sr = new StreamReader("html/" + path);
-
-                    String cs = sr.ReadToEnd();
-
-                    String[] split_at_beginnig_tag = cs.Split(new String[] { "<cs>" }, StringSplitOptions.None);
-                    String non_cs_code_at_beginning = split_at_beginnig_tag[0];
-
-                    HttpProcessor.writeSuccess(out_stream);
-                    out_stream.Write(non_cs_code_at_beginning);
-                    for (int i = 1; i < split_at_beginnig_tag.Length; i++)
+                    try
                     {
-                        String[] split_at_end_tag = split_at_beginnig_tag[i].Split(new String[] { "</cs>" }, StringSplitOptions.None);
-                        String cs_code = split_at_end_tag[0];
-                        String following_non_cs_code = split_at_end_tag[1];
+                        StreamReader sr = new StreamReader(HttpUtil.getHTMLdirectory() + path);
 
-                        String generated_html = CsInterpreter.interpretCsCode(cs_code, pl, "html/" + path, vars);
-                        generated_html += following_non_cs_code;
+                        String cs = sr.ReadToEnd();
 
-                        out_stream.Write(generated_html);
+                        String[] split_at_beginnig_tag = cs.Split(new String[] { "<cs>" }, StringSplitOptions.None);
+                        String non_cs_code_at_beginning = split_at_beginnig_tag[0];
+
+                        HttpProcessor.writeSuccess(out_stream);
+                        out_stream.Write(non_cs_code_at_beginning);
+                        for (int i = 1; i < split_at_beginnig_tag.Length; i++)
+                        {
+                            String[] split_at_end_tag = split_at_beginnig_tag[i].Split(new String[] { "</cs>" }, StringSplitOptions.None);
+                            String cs_code = split_at_end_tag[0];
+                            String following_non_cs_code = split_at_end_tag[1];
+
+                            String generated_html = CsInterpreter.interpretCsCode(cs_code, pl, HttpUtil.getHTMLdirectory() + path, vars);
+                            generated_html += following_non_cs_code;
+
+                            out_stream.Write(generated_html);
+                        }
+
                     }
+                    catch (IndexOutOfRangeException ioore)
+                    {
+                        HttpProcessor.writeSuccess(out_stream);
 
-
+                        out_stream.WriteLine("<h1> 566 Defect .cs code </h1>");
+                    }
                 }
-                catch (FileNotFoundException fnfe)
+                else
                 {
-                    sendFile("404", "text/html", out_stream);
-                }
-                catch (IndexOutOfRangeException ioore)
-                {
-                    HttpProcessor.writeSuccess(out_stream);
-
-                    out_stream.WriteLine(
-                        "<h1> 566 Defect .cs code </h1>"
-                        );
+                    String path = url.Substring(1);
+                    sendFile(path, out_stream);
                 }
             }
-            else
+            catch (IOException ioe)
             {
-                Console.WriteLine("request: {0}", url);
-                HttpProcessor.writeSuccess(out_stream);
-
-                out_stream.WriteLine(
-                    "<h1> Default Page </h1>" +
-                    "<form action=index.html method=post>" +
-                        "<input id=trans name=user type=text value=Janni>" +
-                        "<input id=trans name=pw type=text value=asdf>" +
-                        "<input id=trans name=uid type=text value=-1959629167>" +
-                        "<input type=image id=myButton src=/arrow.png>" +
-                    "</form>"
-                    );
-            }
-        
+                if (ioe is FileNotFoundException || ioe is DirectoryNotFoundException)
+                {
+                    if (!alternative_pathing) throw ioe;
+                    foreach (String s in HttpUtil.alternativePage)
+                    {
+                        try
+                        {
+                            openFile(((s.StartsWith("/")) ? "" : url) + s, out_stream, null, false);
+                            break;
+                        }
+                        catch (IOException fnfeindex)
+                        {
+                            continue;
+                        }
+                    }
+                }
+                else throw ioe;
+            }        
         }
 
         private void sendFile(String path, String mime_type, StreamWriter out_stream)
         {
-            Stream fs = File.Open("html/" + path, FileMode.Open);
+            Stream fs = File.Open(HttpUtil.getHTMLdirectory() + path, FileMode.Open);
 
             HttpProcessor.writeSuccess(out_stream, mime_type);
             out_stream.Flush();
@@ -115,6 +103,11 @@ namespace VotemUp.HTTP
             out_stream.BaseStream.Flush();
             fs.Flush();
             fs.Close();                   
+        }
+
+        private void sendFile(String path, StreamWriter out_stream)
+        {
+            sendFile(path, HttpUtil.getMimetypeByFileExtension(path), out_stream);
         }
 
         public override void handlePOSTRequest(HttpProcessor p, StreamReader inputData)

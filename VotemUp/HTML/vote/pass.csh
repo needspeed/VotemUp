@@ -7,10 +7,10 @@
 <body>
 <header>
 <div id="act">
-<a href="index.cs"><img src="button1.png" height="50px"></a>
+<a href="index.csh"><img src="button1.png" height="50px"></a>
 </div>
 <div id="inact">
-<a href="vote.cs"><img src="arrow.png" height="50px"></a>
+<a href="vote.csh"><img src="arrow.png" height="50px"></a>
 </div>
 </header>
 <div id="wrapper">

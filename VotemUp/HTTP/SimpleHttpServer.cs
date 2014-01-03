@@ -184,7 +184,7 @@ namespace Bend.Util {
         }
 
         public void writeFailure() {
-            outputStream.WriteLine("HTTP/1.0 404 File not found");
+            outputStream.WriteLine("HTTP/1.0 567 Server error");
             outputStream.WriteLine("Connection: close");
             outputStream.WriteLine("");
         }
