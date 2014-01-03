@@ -7,11 +7,11 @@ body,ul,li {
 body {
     font-family:"helvetica", Times, sans-serif;
 	color:#373737;
-	background-image:url(textured_paper.png);
+	background-color:#606060;
 }
 
 header{
-	background-image:url(textured_paper.png);
+	background-color:#606060;
 	background-repeat:repeat;
     position:fixed; 
     z-index:2;
