@@ -22,7 +22,7 @@ namespace VotemUp.HTTP
 
         public enum MIMETYPE
         {
-            HTML, PNG, CSS
+            HTML, PNG, BMP, JPG, JPEG, CSS
         }
 
         public static String getMimetype(MIMETYPE m)
@@ -33,6 +33,12 @@ namespace VotemUp.HTTP
                     return "text/html";
                 case MIMETYPE.PNG:
                     return "image/png";
+                case MIMETYPE.BMP:
+                    return "image/bmp";
+                case MIMETYPE.JPG:
+                    return "image/jpg";
+                case MIMETYPE.JPEG:
+                    return "image/jpeg";
                 case MIMETYPE.CSS:
                     return "text/css";
                 default:
@@ -43,11 +49,13 @@ namespace VotemUp.HTTP
         public static String getMimetypeByFileExtension(String file)
         {
             if (file.EndsWith(".png")) return getMimetype(MIMETYPE.PNG);
+            else if (file.EndsWith(".jpg")) return getMimetype(MIMETYPE.JPG);
+            else if (file.EndsWith(".jpeg")) return getMimetype(MIMETYPE.JPEG);
+            else if (file.EndsWith(".bmp")) return getMimetype(MIMETYPE.BMP);
             else if (file.EndsWith(".html") || file.EndsWith(".csh")) return getMimetype(MIMETYPE.HTML);
             else if (file.EndsWith(".css")) return getMimetype(MIMETYPE.CSS);
             else return "";
         }
-
 
         public static String getHTMLdirectory()
         {

@@ -8,20 +8,21 @@ namespace VotemUp
 {
     class PlayList
     {
-        Dictionary<int, double> songspriority;
-        Dictionary<int, Song> songs;
-        DateTime createdOn;
+        private Dictionary<int, double> songspriority;
+        private Dictionary<int, Song> songs;
+        private DateTime createdOn;
+        private String albumcover_path;
 
-        public PlayList(String path)
+        public PlayList(String path, String albumcover_path)
         {
-            this.songs = getParsedSongs(path);
+            this.songs = getParsedSongs(path, albumcover_path);
             songspriority = new Dictionary<int, double>();
             foreach (int i in songs.Keys) songspriority[i] = 0;
             this.createdOn = DateTime.Now;
-            
+            this.albumcover_path = albumcover_path;
         }
 
-        public static Dictionary<int, Song> getParsedSongs(String path)
+        public static Dictionary<int, Song> getParsedSongs(String path, String albumcover_path)
         {
             Dictionary<int, Song> songs = new Dictionary<int, Song>();
             String[] readFile = Util.readFileToArray(path);
@@ -32,11 +33,19 @@ namespace VotemUp
                 {
                     try
                     {
-                        Song song = new Song(act_line);
+                        Song song = new Song(act_line, albumcover_path);
                         songs[song.getUniqueID()] = song;
                     }
-                    catch (System.IO.FileNotFoundException fnfe) { continue; } //Need better handling seriously
-                    catch (Exception e) { continue; }
+                    catch (System.IO.FileNotFoundException fnfe) 
+                    {
+                        Console.WriteLine("File not found: " + act_line);
+                        continue; 
+                    } 
+                    catch (TagLib.CorruptFileException cfe) 
+                    {
+                        Console.WriteLine("Corrupt File: " + act_line);
+                        continue; 
+                    }
                 }
             }
             return songs;
@@ -115,6 +124,46 @@ namespace VotemUp
                 if (success) songspriority[uid] = songs[uid].getPriority();
             }
             return success;
+        }
+
+        public static String createAlbumCover(TagLib.IPicture[] pics, String path)
+        {
+            TagLib.IPicture pic = null;
+            if (pics.Length > 0)
+            {
+                pic = pics[0];
+                try
+                {
+                    path = path.Replace(' ', '_');
+                    String extension = "." + pic.MimeType.Split('/')[1];
+                    // Open file for reading
+                    if (!System.IO.File.Exists(path))
+                    {                        
+                        System.IO.FileStream _FileStream = new System.IO.FileStream(path + extension, System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                        // Writes a block of bytes to this stream using data from
+                        // a byte array.
+                        Byte[] arrayToWrite = pic.Data.ToArray();
+                        _FileStream.Write(arrayToWrite, 0, arrayToWrite.Length);
+
+                        // close file stream
+                        _FileStream.Close();
+                        return path + extension;
+                    }
+                    else return path + extension;
+                }
+                catch (System.IO.DirectoryNotFoundException dnfe)
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                    return createAlbumCover(pics, path);
+                }
+                catch (Exception _Exception)
+                {
+                    // Error
+                    Console.WriteLine("Exception caught in process: {0}", _Exception.ToString());
+                    return null;
+                }
+            }
+            else return null;
         }
     }
 }

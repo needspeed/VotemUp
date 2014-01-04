@@ -70,7 +70,14 @@ namespace Bend.Util {
             catch (Exception e) 
             {
                 Console.WriteLine("Exception: " + e.ToString());
-                writeFailure();
+                try
+                {
+                    writeFailure();
+                }
+                catch (IOException ioe)
+                {
+                    Console.WriteLine("Connection reset: " + ioe.Message);
+                }
             }
             try
             {

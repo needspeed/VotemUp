@@ -22,10 +22,10 @@ namespace VotemUp
             public String picture;
         }
 
-        public Song (String path)
+        public Song(String path, String albumcovers_path)
         {
             this.path = path;
-            this.info = getMP3Info(path);
+            this.info = getMP3Info(path, albumcovers_path);
             this.votes = new Votes();
         }
 
@@ -34,7 +34,7 @@ namespace VotemUp
             return votes.addVote(vote);
         }
 
-        public static mp3Head getMP3Info(String path)
+        public static mp3Head getMP3Info(String path, String albumcovers_path)
         {
             mp3Head toreturn;
             TagLib.File f = TagLib.File.Create(path);
@@ -42,8 +42,7 @@ namespace VotemUp
             toreturn.title = f.Tag.Title;
             toreturn.artist = f.Tag.JoinedPerformers;
             toreturn.duration = (int)f.Properties.Duration.TotalSeconds;
-            //toreturn.picture = f.Tag.Pictures[0].Description; //ToDO getPath
-            toreturn.picture = null;
+            toreturn.picture = PlayList.createAlbumCover(f.Tag.Pictures, toreturn.picture = albumcovers_path + toreturn.title);                
 
             return toreturn;
         }

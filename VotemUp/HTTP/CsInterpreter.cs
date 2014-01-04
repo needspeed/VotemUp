@@ -63,7 +63,7 @@ namespace VotemUp
         {
             String read_html = static_html_element;
 
-            read_html = read_html.Replace("$ALBUM_COVER", info.picture);
+            if(info.picture != null) read_html = read_html.Replace("$ALBUM_COVER_PATH", "/"+info.picture.Split(new string[]{HTTP.HttpUtil.getHTMLdirectory()},StringSplitOptions.None)[1]);
             read_html = read_html.Replace("$SONG_TITLE", info.title);
             read_html = read_html.Replace("$SONG_ARTIST", info.artist);
             read_html = read_html.Replace("$SONG_DURATION", (info.duration)/60 + ":" + ((info.duration%60 > 9) ? "" : "0") + info.duration%60 );

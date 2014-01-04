@@ -15,6 +15,7 @@ namespace VotemUp
     public partial class VotemUp : Form
     {
         const int HTTP_PORT = 9987;
+        const string ALBUM_COVER_PATH = "covers/";
 
         String masterpw = "";
         PlayList pl;
@@ -202,7 +203,7 @@ namespace VotemUp
 
         private void loadPlaylistButton_Click(object sender, EventArgs e)
         {
-            this.pl = new PlayList(getPlaylistPath());
+            this.pl = new PlayList(getPlaylistPath(), HTTP.HttpUtil.getHTMLdirectory() + ALBUM_COVER_PATH);
             displayVotedPlaylist(pl.getPlayListReadable());
         }
 
